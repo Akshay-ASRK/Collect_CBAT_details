@@ -1,521 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RRB ALP 2024 CBAT – T‑Score & Report</title>
-<style>
-  :root{
-    --bg:#0a0f1f;
-    --card:#121834;
-    --accent:#4f8cff;
-    --accent2:#00d4a6;
-    --text:#e8ecff;
-    --muted:#a9b3d6;
-    --warn:#ffb020;
-    --danger:#ff5565;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:Inter,system-ui,Arial,sans-serif; color:var(--text);
-    background: radial-gradient(1200px 600px at 10% -10%, #1b2658 0, #0a0f1f 60%);
-    min-height:100vh;
-  }
-  /* NAV */
-  nav{
-    position:sticky; top:0; z-index:10;
-    background:rgba(10,15,31,.75); backdrop-filter: blur(10px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  .nav-inner{
-    max-width:1100px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:16px;
-  }
-  .brand{
-    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text);
-    font-weight:700;
-  }
-  .brand img{ width:36px; height:36px; border-radius:8px; }
-  .spacer{ flex:1 }
-  .nav-link{ color:var(--muted); text-decoration:none; margin-left:14px; }
-  .nav-link:hover{ color:var(--text) }
-  .home-btn{ color:var(--text); text-decoration:none; font-weight:600; }
-
-  /* layout */
-  .container{ max-width:1100px; margin:24px auto; padding:0 16px; }
-  .card{
-    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:16px; padding:20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  }
-
-  h1{ font-size:28px; margin:10px 0 6px; }
-  h2{ font-size:22px; margin:8px 0 4px; color:#dfe6ff }
-  h3{ font-size:18px; margin:8px 0 4px; color:#dfe6ff }
-  p{ color:var(--muted) }
-
-  /* popup */
-  .popup{
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-    background: rgba(0,0,0,.55); z-index:999;
-  }
-  .popup .panel{
-    width:min(520px, 92%); background:var(--card); border:1px solid rgba(255,255,255,.1);
-    border-radius:16px; padding:20px;
-  }
-
-  /* inputs */
-  .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; }
-  .col-12{ grid-column: span 12; }
-  .col-6{ grid-column: span 6; }
-  .col-4{ grid-column: span 4; }
-  .field{ display:flex; flex-direction:column; gap:6px; }
-  label{ font-size:13px; color:#cbd5ff; }
-  input, select{
-    background:#0d132a; color:var(--text); border:1px solid rgba(255,255,255,.1);
-    padding:10px 12px; border-radius:10px; outline:none;
-  }
-  input:focus, select:focus{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,140,255,.2); }
-  .row{ display:flex; gap:12px; flex-wrap:wrap; }
-  .btn{
-    appearance:none; border:none; cursor:pointer; padding:10px 14px; border-radius:12px; font-weight:600;
-    background:linear-gradient(90deg, var(--accent), #7aa5ff); color:#071028;
-    box-shadow: 0 8px 20px rgba(79,140,255,.35);
-  }
-  .btn.secondary{ background:#0d132a; color:var(--text); border:1px solid rgba(255,255,255,.16); box-shadow:none; }
-  .btn.warn{ background: linear-gradient(90deg, var(--warn), #ffd28a); color:#2a1700; }
-  .btn.danger{ background: linear-gradient(90deg, var(--danger), #ff98a4); color:#2a0005; }
-
-  /* tables */
-  table{ width:100%; border-collapse:collapse; margin-top:10px; }
-  th, td{ padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.08); text-align:left; }
-  th{ color:#cdd7ff; font-weight:700; background:rgba(255,255,255,.05); }
-  td small{ color:var(--muted); }
-  .pill{
-    display:inline-flex; gap:6px; align-items:center; padding:4px 10px; border-radius:999px;
-    border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:#e7eeff; font-size:12px;
-  }
-
-  /* sections */
-  #formWrap, #reportWrap, #adminWrap{ display:none; }
-
-  /* footer */
-  footer{ text-align:center; color:var(--muted); margin:24px 0 40px; font-size:13px; }
-</style>
+  <meta charset="UTF-8">
+  <title>RRB ALP 2024 CBAT Data Collector</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin:20px; }
+    .field { margin-bottom:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .pill { background:#eee; padding:4px 8px; border-radius:4px; margin:2px; }
+    #firstPopup { position:fixed; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); }
+    #firstPopup .box { background:white; padding:20px; border-radius:6px; max-width:400px; text-align:center; }
+    #formWrap, #reportWrap, #adminWrap { display:none; margin-top:20px; }
+    table { border-collapse:collapse; width:100%; margin-top:10px; }
+    th, td { border:1px solid #ccc; padding:6px; text-align:center; }
+  </style>
 </head>
 <body>
+  <h1>RRB ALP 2024 CBAT</h1>
 
-<nav>
-  <div class="nav-inner">
-    <a class="brand home-btn" href="./">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" />
-      <span>RRB ALP CBAT Reports</span>
-    </a>
-    <a class="nav-link" href="./">🏠 Home</a>
-    <div class="spacer"></div>
-    <a class="nav-link" href="https://t.me/Akki_Inspire" target="_blank" title="Join Telegram">
-      <strong>📣 Join our Telegram</strong>
-    </a>
-  </div>
-</nav>
-
-<div class="container">
-  <div class="card" id="hero">
-    <h1>CBAT T‑Score & Overall Score (out of 30)</h1>
-    <p>Auto-calculated from your Battery raw scores within <strong>same Zone + Exam Date + Shift</strong> and grouped by <strong>Re‑Exam</strong> status.</p>
-  </div>
-
-  <!-- POPUP -->
-  <div class="popup" id="firstPopup">
-    <div class="panel">
-      <h2>Have you filled the form earlier?</h2>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" onclick="onPopupAnswer(true)">Yes</button>
-        <button class="btn secondary" onclick="onPopupAnswer(false)">No</button>
-      </div>
+  <!-- Popup -->
+  <div id="firstPopup" style="display:none">
+    <div class="box">
+      <p>Do you already know your Roll No?</p>
+      <button onclick="onPopupAnswer(true)">Yes</button>
+      <button onclick="onPopupAnswer(false)">No</button>
     </div>
   </div>
 
-  <!-- FORM -->
-  <div class="card" id="formWrap">
-    <h2>CBAT Details Form</h2>
-    <p><em>All fields are mandatory. (You will get CSV on our Telegram channel.)</em></p>
-
-    <form id="cbatForm" class="grid"></form>
-
-    <div class="row" style="margin-top:10px">
-      <button class="btn" id="submitBtn" type="button">Submit</button>
-      <button class="btn secondary" type="button" onclick="resetForm()">Reset</button>
-    </div>
+  <!-- Form -->
+  <div id="formWrap">
+    <h2>Enter Your Details</h2>
+    <form id="cbatForm" class="row"></form>
+    <button id="submitBtn" type="button">Submit</button>
+    <button type="button" onclick="resetForm()">Reset</button>
   </div>
 
-  <!-- REPORT -->
-  <div class="card" id="reportWrap">
+  <!-- Report -->
+  <div id="reportWrap">
+    <h2>Your Report</h2>
     <div id="reportMeta"></div>
     <table id="reportTable"></table>
-    <div class="row" style="margin-top:12px">
-      <button class="btn" onclick="scrollToTop()">Back to Top</button>
-    </div>
+    <button onclick="scrollToTop()">Back to Top</button>
   </div>
 
-  <!-- ADMIN -->
-  <div class="card" id="adminWrap">
+  <!-- Admin -->
+  <div id="adminWrap">
     <h2>Admin Panel</h2>
-    <div class="row">
-      <input id="adminPass" type="password" placeholder="Enter admin password" style="min-width:280px" />
-      <button class="btn warn" onclick="downloadCSV()">Generate & Download CSV</button>
-    </div>
-    <p id="adminHint" style="margin-top:8px; display:none;">Generating…</p>
+    <input type="password" id="adminPass" placeholder="Enter admin password">
+    <button onclick="downloadCSV()">Download CSV</button>
+    <div id="adminHint" style="display:none">Downloading…</div>
   </div>
-</div>
 
-<footer>
-  © 2025 CBAT Analytics. Built with ❤️ for candidates.
-</footer>
+  <!-- Script -->
+  <script>
+  /* ===== CONFIG ===== */
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg1sD163E6pBlZshzQ1vp3xLEvW2jc1vdD7ccbiZm9WLjlCRkR-Si1pK37wnSA2zdO3g/exec";
 
-<script>
-/* ===== CONFIG ===== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg1sD163E6pBlZshzQ1vp3xLEvW2jc1vdD7ccbiZm9WLjlCRkR-Si1pK37wnSA2zdO3g/exec"; // <-- set me
+  /* ===== UTIL ===== */
+  const qs = sel => document.querySelector(sel);
+  const qsa = sel => [...document.querySelectorAll(sel)];
+  function toast(msg, type='info'){ alert(msg); }
+  function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
 
-/* ===== UTIL ===== */
-const qs = sel => document.querySelector(sel);
-const qsa = sel => [...document.querySelectorAll(sel)];
-function toast(msg, type='info'){
-  alert(msg); // simple & universal
-}
-function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+  /* ===== INIT ===== */
+  const pathIsAdmin = location.pathname.endsWith('/admin') || location.hash==='#admin';
+  document.addEventListener('DOMContentLoaded', () => {
+    if (pathIsAdmin) {
+      qs('#adminWrap').style.display = 'block';
+    } else {
+      qs('#firstPopup').style.display = 'flex';
+      buildForm();
+    }
+  });
 
-/* ===== INIT ===== */
-const pathIsAdmin = location.pathname.endsWith('/admin') || location.pathname.endsWith('#admin');
-document.addEventListener('DOMContentLoaded', () => {
-  if (pathIsAdmin) {
-    qs('#adminWrap').style.display = 'block';
+  /* ===== POPUP FLOW ===== */
+  function onPopupAnswer(yes){
     qs('#firstPopup').style.display = 'none';
-    qs('#formWrap').style.display = 'none';
-    qs('#reportWrap').style.display = 'none';
-  } else {
-    qs('#firstPopup').style.display = 'flex';
-    buildForm();
-  }
-});
-
-/* ===== POPUP FLOW ===== */
-function onPopupAnswer(yes){
-  qs('#firstPopup').style.display = 'none';
-  if (yes){
-    const roll = prompt('Enter your 15 digit ALP 2024 CBAT Roll No:');
-    if (!roll) { qs('#formWrap').style.display = 'block'; return; }
-    if (!/^\d{15}$/.test(roll)){ toast('Roll No must be exactly 15 digits.'); qs('#formWrap').style.display='block'; return; }
-    fetchReport(roll).then(r=>{
-      if (r.status==='ok'){
-        renderReport(r);
-      } else if (r.status==='not_found'){
-        if (confirm('Roll not found. Try again? Click "Cancel" to fill the form.')) {
-          onPopupAnswer(true);
+    if (yes){
+      const roll = prompt('Enter your 15 digit ALP 2024 CBAT Roll No:');
+      if (!roll) { qs('#formWrap').style.display = 'block'; return; }
+      if (!/^\d{15}$/.test(roll)){ toast('Roll No must be exactly 15 digits.'); qs('#formWrap').style.display='block'; return; }
+      fetchReport(roll).then(r=>{
+        if (r.status==='ok'){
+          renderReport(r);
+        } else if (r.status==='not_found'){
+          if (confirm('Roll not found. Try again? Click "Cancel" to fill the form.')) {
+            onPopupAnswer(true);
+          } else {
+            qs('#formWrap').style.display = 'block';
+          }
         } else {
+          toast('Error fetching report. Please fill the form.');
           qs('#formWrap').style.display = 'block';
         }
-      } else {
-        toast('Error fetching report. Please fill the form.');
-        qs('#formWrap').style.display = 'block';
-      }
-    }).catch(()=>{ toast('Network error. Please fill the form.'); qs('#formWrap').style.display='block'; });
-  } else {
-    qs('#formWrap').style.display = 'block';
-  }
-}
-
-/* ===== API CALLS (CORS-friendly) ===== */
-async function apiGet(params){
-  const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
-  const res = await fetch(url, { method:'GET', mode:'cors' });
-  const ct = res.headers.get('content-type')||'';
-  if (ct.includes('application/json')) return res.json();
-  return res.text();
-}
-async function apiPostJson(obj){
-  // Use text/plain to avoid preflight
-  const res = await fetch(SCRIPT_URL, {
-    method:'POST',
-    mode:'cors',
-    headers:{ 'Content-Type':'text/plain' },
-    body: JSON.stringify(obj)
-  });
-  const ct = res.headers.get('content-type')||'';
-  if (ct.includes('application/json')) return res.json();
-  return res.text();
-}
-
-async function fetchReport(roll){
-  return apiGet({ action:'getReport', roll });
-}
-async function checkRollExists(roll){
-  const r = await apiPostJson({ type:'checkRoll', roll });
-  return !!(r && r.exists);
-}
-async function saveOrUpdate(payload, forceUpdate=false){
-  return apiPostJson({ type:'saveOrUpdate', payload, forceUpdate });
-}
-
-/* ===== FORM BUILD & VALIDATION ===== */
-function buildForm(){
-  const f = qs('#cbatForm');
-  f.innerHTML = '';
-
-  // Helper builders
-  const addField = (label, id, type='text', attrs={})=>{
-    const wrap = document.createElement('div');
-    wrap.className = 'field col-6';
-    wrap.innerHTML = `<label for="${id}">${label}</label>`;
-    const inp = document.createElement('input');
-    inp.id = id; inp.type = type;
-    Object.entries(attrs).forEach(([k,v])=> inp.setAttribute(k,v));
-    wrap.appendChild(inp);
-    f.appendChild(wrap);
-  };
-  const addSelect = (label, id, options, attrs={})=>{
-    const wrap = document.createElement('div');
-    wrap.className = 'field col-6';
-    wrap.innerHTML = `<label for="${id}">${label}</label>`;
-    const sel = document.createElement('select'); sel.id = id;
-    Object.entries(attrs).forEach(([k,v])=> sel.setAttribute(k,v));
-    const def = document.createElement('option'); def.value=''; def.textContent='-- Select --'; sel.appendChild(def);
-    options.forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
-    wrap.appendChild(sel);
-    f.appendChild(wrap);
-  };
-  const addNumber = (label, id, min, max, step=1)=>{
-    addField(label, id, 'number', { min, max, step, required:'required' });
-  };
-
-  // 1) Re-Exam?
-  addSelect('Were you called for a re-exam of RRB ALP 2024 CBAT on 31 August?', 'ReExam', ['Yes','No'], { required:'required' });
-
-  // 2) Roll No (15-digit)
-  addField('Enter exact 15-digit roll no (ALP 2024 CBAT held on 15-July-2025)', 'RollNo', 'text', { required:'required', pattern:'\\d{15}', maxlength:'15' });
-
-  // 3) CBT-2 Part A Marks (0..100)
-  addNumber('CBT-2 Part A Marks (0-100)', 'PartAMarks', 0, 100);
-
-  // 4) Zone
-  addSelect('RRB Zone (as per application)', 'Zone', [
-    'Ahmedabad','Ajmer','Bangalore','Bhopal','Bhubaneswar','Bilaspur','Chandigarh',
-    'Chennai','Gorakhpur','Guwahati','Jammu and Srinagar','Kolkata','Malda','Mumbai',
-    'Muzaffarpur','Patna','Prayagraj','Ranchi','Secunderabad','Siliguri','Thiruvananthapuram'
-  ], { required:'required' });
-
-  // 5) Exam Date (default 15-July-2024 but user can edit)
-  addField('CBAT Exam Date (default 15-July-2024)', 'ExamDate', 'text', { required:'required', value:'15-July-2024' });
-
-  // 6) Shift (1st/2nd/3rd)
-  addSelect('Shift', 'Shift', ['1st','2nd','3rd'], { required:'required' });
-
-  // Batteries: Attempts + Accuracy
-  // 7/8) Memory (0..24), (0..100)
-  addNumber('Battery 1 Memory (Figure-Find) Attempts (0-24)', 'Mem_Attempts', 0, 24);
-  addNumber('Avg accuracy % for Battery 1 (0-100)', 'Mem_Accuracy', 0, 100);
-
-  // 9/10) Directions (0..20), (0..100)
-  addNumber('Battery 2 Directions (Watch) Attempts (0-20)', 'Dir_Attempts', 0, 20);
-  addNumber('Avg accuracy % for Battery 2 (0-100)', 'Dir_Accuracy', 0, 100);
-
-  // 11/12) Depth Perception (0..50), (0..100)
-  addNumber('Battery 3 Depth Perception (Hidden Cube) Attempts (0-50)', 'Depth_Attempts', 0, 50);
-  addNumber('Avg accuracy % for Battery 3 (0-100)', 'Depth_Accuracy', 0, 100);
-
-  // 13/14) Concentration (0..60), (0..100)
-  addNumber('Battery 4 Concentration (Figure Placement) Attempts (0-60)', 'Conc_Attempts', 0, 60);
-  addNumber('Avg accuracy % for Battery 4 (0-100)', 'Conc_Accuracy', 0, 100);
-
-  // 15/16) Perceptual Speed (0..72), (0..100)
-  addNumber('Battery 5 Perceptual Speed (Same Figure Matching) Attempts (0-72)', 'Perc_Attempts', 0, 72);
-  addNumber('Avg accuracy % for Battery 5 (0-100)', 'Perc_Accuracy', 0, 100);
-
-  // submit
-  qs('#submitBtn').onclick = onSubmitForm;
-}
-
-function getFormData(){
-  const val = id => (qs('#'+id).value||'').trim();
-  const num = id => Number(val(id));
-  const payload = {
-    ReExam: val('ReExam'),
-    RollNo: val('RollNo'),
-    PartAMarks: num('PartAMarks'),
-    Zone: val('Zone'),
-    ExamDate: val('ExamDate'),
-    Shift: val('Shift'),
-
-    Mem_Attempts: num('Mem_Attempts'),
-    Mem_Accuracy: num('Mem_Accuracy'),
-
-    Dir_Attempts: num('Dir_Attempts'),
-    Dir_Accuracy: num('Dir_Accuracy'),
-
-    Depth_Attempts: num('Depth_Attempts'),
-    Depth_Accuracy: num('Depth_Accuracy'),
-
-    Conc_Attempts: num('Conc_Attempts'),
-    Conc_Accuracy: num('Conc_Accuracy'),
-
-    Perc_Attempts: num('Perc_Attempts'),
-    Perc_Accuracy: num('Perc_Accuracy')
-  };
-  return payload;
-}
-
-function validatePayload(p){
-  if (!['Yes','No'].includes(p.ReExam)) return 'Select Re-Exam Yes/No';
-  if (!/^\d{15}$/.test(p.RollNo)) return 'Roll No must be exactly 15 digits';
-  const inRange = (x,min,max)=> Number.isFinite(x) && x>=min && x<=max;
-
-  if (!inRange(p.PartAMarks,0,100)) return 'CBT-2 Part A must be 0..100';
-  if (!p.Zone) return 'Select Zone';
-  if (!p.ExamDate) return 'Enter Exam Date';
-  if (!['1st','2nd','3rd'].includes(p.Shift)) return 'Select Shift';
-
-  if (!inRange(p.Mem_Attempts,0,24)) return 'Battery 1 Attempts 0..24';
-  if (!inRange(p.Mem_Accuracy,0,100)) return 'Battery 1 Accuracy 0..100';
-
-  if (!inRange(p.Dir_Attempts,0,20)) return 'Battery 2 Attempts 0..20';
-  if (!inRange(p.Dir_Accuracy,0,100)) return 'Battery 2 Accuracy 0..100';
-
-  if (!inRange(p.Depth_Attempts,0,50)) return 'Battery 3 Attempts 0..50';
-  if (!inRange(p.Depth_Accuracy,0,100)) return 'Battery 3 Accuracy 0..100';
-
-  if (!inRange(p.Conc_Attempts,0,60)) return 'Battery 4 Attempts 0..60';
-  if (!inRange(p.Conc_Accuracy,0,100)) return 'Battery 4 Accuracy 0..100';
-
-  if (!inRange(p.Perc_Attempts,0,72)) return 'Battery 5 Attempts 0..72';
-  if (!inRange(p.Perc_Accuracy,0,100)) return 'Battery 5 Accuracy 0..100';
-
-  return null;
-}
-
-async function onSubmitForm(){
-  const payload = getFormData();
-  const err = validatePayload(payload);
-  if (err){ toast(err, 'error'); return; }
-
-  try{
-    const exists = await checkRollExists(payload.RollNo);
-    if (exists){
-      const ok = confirm('This roll number already exists.\nA) Click OK to overwrite and update report.\nB) Click Cancel to keep old data and just view existing report.');
-      if (ok){
-        const resp = await saveOrUpdate(payload, true);
-        if (resp && resp.status==='ok' && resp.report){
-          renderReport(resp.report);
-          toast('Updated successfully ✔️');
-        } else {
-          toast('Update failed. Please try again.', 'error');
-        }
-      } else {
-        // B) show existing report without saving
-        const rep = await fetchReport(payload.RollNo);
-        if (rep && rep.status==='ok') renderReport(rep);
-        else toast('Could not load existing report. Try again later.', 'error');
-      }
+      }).catch(()=>{ toast('Network error. Please fill the form.'); qs('#formWrap').style.display='block'; });
     } else {
-      // new insert
-      const resp = await saveOrUpdate(payload, false);
-      if (resp && resp.status==='ok' && resp.report){
-        renderReport(resp.report);
-        toast('Submitted successfully ✔️');
-      } else if (resp && resp.status==='exists'){
-        // extremely rare race
-        toast('Data exists now; please choose update.', 'warn');
-      } else {
-        toast('Submit failed. Try again.', 'error');
-      }
+      qs('#formWrap').style.display = 'block';
     }
-  } catch(e){
-    console.error(e);
-    toast('Network error. Try again.', 'error');
   }
-}
 
-/* ===== REPORT RENDER ===== */
-function renderReport(data){
-  // show report section
-  qs('#reportWrap').style.display = 'block';
-  qs('#formWrap').style.display = 'none';
-
-  const m = data.meta;
-  const metaHtml = `
-    <h2>Report for Roll: ${m.roll}</h2>
-    <div class="row" style="flex-wrap:wrap">
-      <span class="pill">Zone: <strong>${m.zone}</strong></span>
-      <span class="pill">Date: <strong>${m.examDate}</strong></span>
-      <span class="pill">Shift: <strong>${m.shift}</strong></span>
-      <span class="pill">Group: <strong>${m.reportType}</strong></span>
-      <span class="pill">Group Size: <strong>${m.groupSize}</strong></span>
-    </div>
-    <p style="margin-top:8px">T‑Score formula: <code>T = 50 + 10 * (X − Mean) / SD</code>. SD = population SD. Overall (/30) = <code>(Σ T_i * 30) / 400</code>.</p>
-  `;
-  qs('#reportMeta').innerHTML = metaHtml;
-
-  const rows = [
-    ['Battery', 'Mean', 'SD', 'Your Raw X', 'T‑Score'],
-    [data.batteries.B1.name, fmt(data.batteries.B1.mean), fmt(data.batteries.B1.sd), data.batteries.B1.raw, data.batteries.B1.t],
-    [data.batteries.B2.name, fmt(data.batteries.B2.mean), fmt(data.batteries.B2.sd), data.batteries.B2.raw, data.batteries.B2.t],
-    [data.batteries.B3.name, fmt(data.batteries.B3.mean), fmt(data.batteries.B3.sd), data.batteries.B3.raw, data.batteries.B3.t],
-    [data.batteries.B4.name, fmt(data.batteries.B4.mean), fmt(data.batteries.B4.sd), data.batteries.B4.raw, data.batteries.B4.t],
-    [data.batteries.B5.name, fmt(data.batteries.B5.mean), fmt(data.batteries.B5.sd), data.batteries.B5.raw, data.batteries.B5.t]
-  ];
-  let html = `<thead><tr>${rows[0].map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
-  for (let i=1;i<rows.length;i++){
-    const r = rows[i];
-    html += `<tr>${r.map((c,j)=>`<td>${j===0?'<strong>'+c+'</strong>':c}</td>`).join('')}</tr>`;
-  }
-  html += `</tbody><tfoot><tr><th colspan="4" style="text-align:right">Overall Score (out of 30)</th><th>${data.overall}</th></tr></tfoot>`;
-  qs('#reportTable').innerHTML = html;
-}
-function fmt(x){ return (typeof x==='number') ? x.toFixed(2) : x; }
-
-function resetForm(){
-  qsa('#cbatForm input, #cbatForm select').forEach(el=>{
-    if (el.id==='ExamDate') el.value = '15-July-2024';
-    else if (el.tagName==='SELECT') el.selectedIndex = 0;
-    else el.value = '';
-  });
-}
-
-/* ===== ADMIN ===== */
-async function downloadCSV(){
-  const pass = qs('#adminPass').value || '';
-  if (!pass){ toast('Enter password ❗'); return; }
-  qs('#adminHint').style.display='block';
-  try{
-    const url = SCRIPT_URL + '?' + new URLSearchParams({ action:'adminExport', password: pass });
+  /* ===== API CALLS ===== */
+  async function apiGet(params){
+    const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
     const res = await fetch(url, { method:'GET', mode:'cors' });
-    if (!res.ok){
-      qs('#adminHint').style.display='none';
-      toast('Unauthorized or error.', 'error'); return;
-    }
-    const ct = res.headers.get('content-type') || '';
-    if (!ct.includes('text/csv')){
-      const text = await res.text();
-      qs('#adminHint').style.display='none';
-      try{
-        const j = JSON.parse(text);
-        if (j.status==='unauthorized'){ toast('Wrong password ❌', 'error'); return; }
-      }catch{}
-      toast('Unexpected response.', 'error'); return;
-    }
-    const blob = await res.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `CBAT_Export_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    qs('#adminHint').style.display='none';
-  } catch(e){
-    console.error(e);
-    qs('#adminHint').style.display='none';
-    toast('Network error while downloading CSV', 'error');
+    const ct = res.headers.get('content-type')||'';
+    if (ct.includes('application/json')) return res.json();
+    return res.text();
   }
-}
-</script>
+  async function apiPostJson(obj){
+    const res = await fetch(SCRIPT_URL, {
+      method:'POST', mode:'cors',
+      headers:{ 'Content-Type':'text/plain' },
+      body: JSON.stringify(obj)
+    });
+    const ct = res.headers.get('content-type')||'';
+    if (ct.includes('application/json')) return res.json();
+    return res.text();
+  }
+  async function fetchReport(roll){ return apiGet({ action:'getReport', roll }); }
+  async function checkRollExists(roll){ const r = await apiPostJson({ type:'checkRoll', roll }); return !!(r && r.exists); }
+  async function saveOrUpdate(payload, forceUpdate=false){ return apiPostJson({ type:'saveOrUpdate', payload, forceUpdate }); }
+
+  /* ===== FORM ===== */
+  function buildForm(){
+    const f = qs('#cbatForm'); f.innerHTML = '';
+    const addField=(l,id,t='text',a={})=>{const w=document.createElement('div');w.className='field col-6';w.innerHTML=`<label>${l}</label>`;const i=document.createElement('input');i.id=id;i.type=t;Object.entries(a).forEach(([k,v])=>i.setAttribute(k,v));w.appendChild(i);f.appendChild(w);};
+    const addSelect=(l,id,opt,a={})=>{const w=document.createElement('div');w.className='field col-6';w.innerHTML=`<label>${l}</label>`;const s=document.createElement('select');s.id=id;Object.entries(a).forEach(([k,v])=>s.setAttribute(k,v));s.innerHTML='<option value="">-- Select --</option>';opt.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;s.appendChild(o);});w.appendChild(s);f.appendChild(w);};
+    const addNumber=(l,id,min,max,step=1)=>addField(l,id,'number',{min,max,step,required:'required'});
+    addSelect('Re-Exam 31 Aug?','ReExam',['Yes','No'],{required:'required'});
+    addField('15-digit Roll No','RollNo','text',{required:'required',pattern:'\\d{15}',maxlength:'15'});
+    addNumber('CBT-2 Part A Marks','PartAMarks',0,100);
+    addSelect('Zone','Zone',['Ahmedabad','Ajmer','Bangalore','Bhopal','Bhubaneswar','Bilaspur','Chandigarh','Chennai','Gorakhpur','Guwahati','Jammu and Srinagar','Kolkata','Malda','Mumbai','Muzaffarpur','Patna','Prayagraj','Ranchi','Secunderabad','Siliguri','Thiruvananthapuram'],{required:'required'});
+    addField('Exam Date','ExamDate','text',{required:'required',value:'15-July-2024'});
+    addSelect('Shift','Shift',['1st','2nd','3rd'],{required:'required'});
+    addNumber('Battery1 Attempts','Mem_Attempts',0,24); addNumber('Battery1 Accuracy','Mem_Accuracy',0,100);
+    addNumber('Battery2 Attempts','Dir_Attempts',0,20); addNumber('Battery2 Accuracy','Dir_Accuracy',0,100);
+    addNumber('Battery3 Attempts','Depth_Attempts',0,50); addNumber('Battery3 Accuracy','Depth_Accuracy',0,100);
+    addNumber('Battery4 Attempts','Conc_Attempts',0,60); addNumber('Battery4 Accuracy','Conc_Accuracy',0,100);
+    addNumber('Battery5 Attempts','Perc_Attempts',0,72); addNumber('Battery5 Accuracy','Perc_Accuracy',0,100);
+    qs('#submitBtn').onclick = onSubmitForm;
+  }
+  function getFormData(){ const v=id=>(qs('#'+id).value||'').trim(); const n=id=>Number(v(id)); return {ReExam:v('ReExam'),RollNo:v('RollNo'),PartAMarks:n('PartAMarks'),Zone:v('Zone'),ExamDate:v('ExamDate'),Shift:v('Shift'),Mem_Attempts:n('Mem_Attempts'),Mem_Accuracy:n('Mem_Accuracy'),Dir_Attempts:n('Dir_Attempts'),Dir_Accuracy:n('Dir_Accuracy'),Depth_Attempts:n('Depth_Attempts'),Depth_Accuracy:n('Depth_Accuracy'),Conc_Attempts:n('Conc_Attempts'),Conc_Accuracy:n('Conc_Accuracy'),Perc_Attempts:n('Perc_Attempts'),Perc_Accuracy:n('Perc_Accuracy')}; }
+  function validatePayload(p){ if(!['Yes','No'].includes(p.ReExam)) return 'Select ReExam'; if(!/^\d{15}$/.test(p.RollNo)) return 'Roll 15 digits'; return null; }
+  async function onSubmitForm(){ const p=getFormData(),err=validatePayload(p); if(err){toast(err);return;} try{const ex=await checkRollExists(p.RollNo); if(ex){if(confirm('Roll exists. Overwrite?')){const r=await saveOrUpdate(p,true);if(r&&r.status==='ok'&&r.report)renderReport(r.report);}else{const r=await fetchReport(p.RollNo);if(r&&r.status==='ok')renderReport(r);}}else{const r=await saveOrUpdate(p,false);if(r&&r.status==='ok'&&r.report)renderReport(r.report);} }catch(e){toast('Network error.');}}
+  function resetForm(){ qsa('#cbatForm input,#cbatForm select').forEach(el=>{if(el.id==='ExamDate')el.value='15-July-2024';else if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';}); }
+
+  /* ===== REPORT ===== */
+  function renderReport(d){ qs('#reportWrap').style.display='block'; qs('#formWrap').style.display='none'; const m=d.meta; qs('#reportMeta').innerHTML=`<h2>Report for Roll: ${m.roll}</h2><div class="row"><span class="pill">Zone: <b>${m.zone}</b></span><span class="pill">Date: <b>${m.examDate}</b></span><span class="pill">Shift: <b>${m.shift}</b></span><span class="pill">Group: <b>${m.reportType}</b></span><span class="pill">Group Size: <b>${m.groupSize}</b></span></div>`; const rows=[['Battery','Mean','SD','Raw','T'],[d.batteries.B1.name,d.batteries.B1.mean,d.batteries.B1.sd,d.batteries.B1.raw,d.batteries.B1.t],[d.batteries.B2.name,d.batteries.B2.mean,d.batteries.B2.sd,d.batteries.B2.raw,d.batteries.B2.t],[d.batteries.B3.name,d.batteries.B3.mean,d.batteries.B3.sd,d.batteries.B3.raw,d.batteries.B3.t],[d.batteries.B4.name,d.batteries.B4.mean,d.batteries.B4.sd,d.batteries.B4.raw,d.batteries.B4.t],[d.batteries.B5.name,d.batteries.B5.mean,d.batteries.B5.sd,d.batteries.B5.raw,d.batteries.B5.t]]; let html='<thead><tr>'+rows[0].map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>'; for(let i=1;i<rows.length;i++){html+='<tr>'+rows[i].map((c,j)=>`<td>${j===0?'<b>'+c+'</b>':c}</td>`).join('')+'</tr>';} html+='</tbody><tfoot><tr><th colspan="4">Overall Score</th><th>'+d.overall+'</th></tr></tfoot>'; qs('#reportTable').innerHTML=html; }
+
+  /* ===== ADMIN ===== */
+  async function downloadCSV(){ const pass=qs('#adminPass').value||''; if(!pass){toast('Enter password');return;} qs('#adminHint').style.display='block'; try{const url=SCRIPT_URL+'?'+new URLSearchParams({action:'adminExport',password:pass}); const res=await fetch(url); if(!res.ok){toast('Error or unauthorized');qs('#adminHint').style.display='none';return;} const blob=await res.blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='CBAT_Export.csv'; a.click(); qs('#adminHint').style.display='none'; }catch(e){toast('Network error');qs('#adminHint').style.display='none';}}
+  </script>
 </body>
 </html>
