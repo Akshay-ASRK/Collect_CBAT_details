@@ -3,901 +3,973 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBAT Report System</title>
+    <title>RRB ALP 2024 CBAT Score Calculator</title>
+    <base target="_blank">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #333;
+            min-height: 100vh;
+            padding: 20px;
         }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .nav-container {
+        
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            flex-wrap: wrap;
         }
-
+        
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .logo:hover {
-            color: #764ba2;
-        }
-
-        .nav-links {
             display: flex;
-            gap: 2rem;
+            align-items: center;
+            gap: 15px;
         }
-
-        .nav-links a {
+        
+        .logo img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fdbb2d;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
             text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
         }
-
-        .nav-links a:hover {
-            color: #667eea;
+        
+        nav a:hover {
+            background: rgba(253, 187, 45, 0.3);
         }
-
-        .container {
-            max-width: 800px;
-            margin: 100px auto 50px;
-            padding: 0 2rem;
+        
+        .telegram-btn {
+            background: #0088cc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
         }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        
+        .telegram-btn:hover {
+            background: #006da3;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        
+        .main-content {
+            padding: 30px;
         }
-
-        .modal {
-            display: none;
+        
+        .popup {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
-
-        .modal-content {
+        
+        .popup-content {
             background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 10px;
             text-align: center;
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
-
+        
+        .popup h2 {
+            margin-bottom: 20px;
+            color: #1a2a6c;
+        }
+        
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 12px 25px;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            margin: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            margin: 10px;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        
+        .btn-primary {
+            background: #1a2a6c;
+            color: white;
         }
-
+        
+        .btn-primary:hover {
+            background: #2a3a9c;
+        }
+        
         .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            background: #b21f1f;
+            color: white;
         }
-
+        
         .btn-secondary:hover {
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+            background: #d23f3f;
         }
-
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #34ce57;
+        }
+        
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
+            text-align: left;
         }
-
+        
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
+            color: #1a2a6c;
         }
-
+        
         .form-group input,
         .form-group select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
             border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            background: #f9f9f9;
+            border-left: 5px solid #1a2a6c;
         }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        
+        .form-section h3 {
+            margin-bottom: 15px;
+            color: #1a2a6c;
         }
-
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
+        
+        .battery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
-
-        .report-table th,
-        .report-table td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .report-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        .report-table tr:nth-child(even) {
-            background-color: #f8f9ff;
-        }
-
+        
         .hidden {
             display: none;
         }
-
-        .loading {
+        
+        .report-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .report-header {
             text-align: center;
-            padding: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
         }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+        
+        .report-header h2 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .report-details {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
-
-        .error {
-            color: #e74c3c;
-            background: #ffeaea;
-            padding: 1rem;
+        
+        .detail-item {
+            text-align: center;
+            margin: 10px;
+            min-width: 120px;
+        }
+        
+        .detail-item h4 {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .detail-item p {
+            font-weight: 600;
+            font-size: 16px;
+            color: #1a2a6c;
+        }
+        
+        .battery-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .battery-result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .battery-result h4 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #b21f1f;
+        }
+        
+        .overall-score {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
             border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #e74c3c;
+            margin-top: 20px;
         }
-
-        .success {
-            color: #27ae60;
-            background: #eafaf1;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #27ae60;
+        
+        .overall-score h3 {
+            margin-bottom: 10px;
         }
-
+        
+        .overall-score .score-value {
+            font-size: 32px;
+            color: #fdbb2d;
+        }
+        
         .admin-section {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-top: 2rem;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 30px;
         }
-
+        
+        .admin-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .notification.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .notification.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a2a6c;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .stats-table th, .stats-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stats-table th {
+            background-color: #1a2a6c;
+            color: white;
+        }
+        
+        .stats-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
         @media (max-width: 768px) {
-            .nav-container {
-                padding: 0 1rem;
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
             }
             
-            .container {
-                padding: 0 1rem;
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
             }
             
-            .modal-content {
-                margin: 1rem;
-                width: auto;
+            .battery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-details {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .battery-results {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-item {
+                width: 100%;
+                max-width: 200px;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">📊 CBAT Score Calculator</div>
-            <div class="nav-links">
-                <a href="#" onclick="showHome()" target="_blank" class="btn btn-primary btn-glow me-2">
-                    <i class="fas fa-home"></i> Home </a>
-                <a href="#" onclick="showReports()" target="_blank" class="btn btn-success btn-glow me-2">
-                    <i class="fas fa-file-alt"></i> Reports </a>
-                <a href="#" onclick="openTelegramChannel()" target="_blank" class="btn btn-telegram btn-glow me-2">
-                    <i class="fab fa-telegram"></i> Telegram </a>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
-        <!-- Initial Modal -->
-        <div id="initialModal" class="modal" style="display: flex;">
-            <div class="modal-content">
-                <h2>Welcome to CBAT Report System</h2>
-                <p>Have you filled the form earlier?</p>
-                <button class="btn" onclick="showRollNoInput()">Yes</button>
-                <button class="btn btn-secondary" onclick="showForm()">No</button>
+        <header>
+            <div class="logo">
+                <a href="https://t.me/Akki_Inspire" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/3/37/Indian_Railways.png" alt="Railway Logo">
+                    <h1>RRB ALP 2024 CBAT Score Calculator</h1>
+                </a>
             </div>
-        </div>
-
-        <!-- Roll Number Input Modal -->
-        <div id="rollNoModal" class="modal">
-            <div class="modal-content">
-                <h2>Enter Your Roll Number</h2>
-                <div class="form-group">
-                    <label for="rollNoInput">ALP 2024 CBAT Roll No (15 digits):</label>
-                    <input type="text" id="rollNoInput" maxlength="15" placeholder="Enter 15-digit roll number">
+            <nav>
+                <a href="#" onclick="showHome()">Home</a>
+                <a href="#" onclick="showForm()">Submit Data</a>
+                <a href="#" onclick="showReportForm()">Get Report</a>
+                <!-- Admin link is hidden from normal users -->
+                <a href="#" id="admin-nav" class="hidden" onclick="showAdmin()">Admin</a>
+                <a href="https://t.me/Akki_Inspire" class="telegram-btn">
+                    <i class="fab fa-telegram"></i> Telegram Channel
+                </a>
+            </nav>
+        </header>
+        
+        <div class="main-content">
+            <div id="home-section">
+                <div class="report-card">
+                    <div class="report-header">
+                        <h2>RRB ALP 2024 CBAT Score Calculator</h2>
+                        <p>Calculate your T-Score and Overall Score based on your performance</p>
+                    </div>
+                    
+                    <div class="report-details">
+                        <div class="detail-item">
+                            <h4>Total Candidates</h4>
+                            <p id="total-candidates">5,000+</p>
+                        </div>
+                        <div class="detail-item">
+                            <h4>Active Users</h4>
+                            <p id="active-users">2,500+</p>
+                        </div>
+                        <div class="detail-item">
+                            <h4>Reports Generated</h4>
+                            <p id="reports-generated">7,300+</p>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <button class="btn btn-primary" onclick="showForm()">Submit Your Data</button>
+                        <button class="btn btn-secondary" onclick="showReportForm()">Get Your Report</button>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <h3 style="text-align: center; color: #1a2a6c; margin-bottom: 15px;">How It Works</h3>
+                        <ol style="line-height: 1.8;">
+                            <li>Click on "Submit Your Data" to fill in your CBAT examination details</li>
+                            <li>If you've already submitted, click "Get Your Report" to view your scores</li>
+                            <li>Your T-Score is calculated based on candidates with the same Zone, Date, and Shift</li>
+                            <li>The Overall Score is calculated as: (Sum of T-Scores × 30) / 400</li>
+                            <li>Join our Telegram channel for updates and important information</li>
+                        </ol>
+                    </div>
                 </div>
-                <button class="btn" onclick="checkRollNumber()">Get Report</button>
-                <button class="btn btn-secondary" onclick="showForm()">Fill New Form</button>
-                <button class="btn" onclick="showInitialModal()">Back</button>
             </div>
-        </div>
-
-        <!-- Main Form -->
-        <div id="mainForm" class="card hidden">
-            <h2>CBAT Details Form</h2>
-            <p><strong>Note:</strong> You will get CSV file on our telegram channel</p>
             
-            <form id="cbatForm">
-                <div class="form-group">
-                    <label>1. Had you called for a re-exam of RRB ALP 2024 CBAT Exam on 31 August?</label>
-                    <select id="reExam" required>
-                        <option value="">Select</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
+            <div id="form-section" class="hidden">
+                <div class="report-card">
+                    <div class="report-header">
+                        <h2>CBAT Examination Details</h2>
+                        <p>Fill in your details accurately to calculate your T-Score and Overall Score</p>
+                    </div>
+                    
+                    <form id="cbat-form">
+                        <div class="form-section">
+                            <h3>Basic Information</h3>
+                            <div class="form-group">
+                                <label for="reexam">Were you called for a re-exam of RRB ALP 2024 CBAT on 31 August? *</label>
+                                <select id="reexam" required>
+                                    <option value="">Select Option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rollNo">15 Digit Roll Number of RRB ALP 2024 CBAT Exam (15-July-2025) *</label>
+                                <input type="text" id="rollNo" pattern="[0-9]{15}" title="15 digit roll number" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cbt2Marks">ALP 2024 CBT 2 Exact Part A Marks (0-100) *</label>
+                                <input type="number" id="cbt2Marks" min="0" max="100" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="zone">Applied RRB Zone *</label>
+                                <select id="zone" required>
+                                    <option value="">Select Zone</option>
+                                    <option value="Ahmedabad">Ahmedabad</option>
+                                    <option value="Ajmer">Ajmer</option>
+                                    <option value="Bangalore">Bangalore</option>
+                                    <option value="Bhopal">Bhopal</option>
+                                    <option value="Bhubaneswar">Bhubaneswar</option>
+                                    <option value="Bilaspur">Bilaspur</option>
+                                    <option value="Chandigarh">Chandigarh</option>
+                                    <option value="Chennai">Chennai</option>
+                                    <option value="Gorakhpur">Gorakhpur</option>
+                                    <option value="Guwahati">Guwahati</option>
+                                    <option value="Jammu and Srinagar">Jammu and Srinagar</option>
+                                    <option value="Kolkata">Kolkata</option>
+                                    <option value="Malda">Malda</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Muzaffarpur">Muzaffarpur</option>
+                                    <option value="Patna">Patna</option>
+                                    <option value="Prayagraj">Prayagraj</option>
+                                    <option value="Ranchi">Ranchi</option>
+                                    <option value="Secunderabad">Secunderabad</option>
+                                    <option value="Siliguri">Siliguri</option>
+                                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="examDate">RRB ALP 2024 CBAT Exam Date *</label>
+                                <input type="date" id="examDate" value="2024-07-15" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="shift">Shift *</label>
+                                <select id="shift" required>
+                                    <option value="">Select Shift</option>
+                                    <option value="1st">1st Shift</option>
+                                    <option value="2nd">2nd Shift</option>
+                                    <option value="3rd">3rd Shift</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3>Battery Test Details</h3>
+                            <div class="battery-grid">
+                                <div class="form-group">
+                                    <label for="battery1Attempts">Memory Test Attempts (0-24) *</label>
+                                    <input type="number" id="battery1Attempts" min="0" max="24" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery1Accuracy">Memory Test Accuracy (0-100%) *</label>
+                                    <input type="number" id="battery1Accuracy" min="0" max="100" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery2Attempts">Directions Test Attempts (0-20) *</label>
+                                    <input type="number" id="battery2Attempts" min="0" max="20" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery2Accuracy">Directions Test Accuracy (0-100%) *</label>
+                                    <input type="number" id="battery2Accuracy" min="0" max="100" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery3Attempts">Depth Perception Test Attempts (0-50) *</label>
+                                    <input type="number" id="battery3Attempts" min="0" max="50" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery3Accuracy">Depth Perception Test Accuracy (0-100%) *</label>
+                                    <input type="number" id="battery3Accuracy" min="0" max="100" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery4Attempts">Concentration Test Attempts (0-60) *</label>
+                                    <input type="number" id="battery4Attempts" min="0" max="60" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery4Accuracy">Concentration Test Accuracy (0-100%) *</label>
+                                    <input type="number" id="battery4Accuracy" min="0" max="100" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery5Attempts">Perceptual Speed Test Attempts (0-72) *</label>
+                                    <input type="number" id="battery5Attempts" min="0" max="72" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="battery5Accuracy">Perceptual Speed Test Accuracy (0-100%) *</label>
+                                    <input type="number" id="battery5Accuracy" min="0" max="100" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button type="submit" class="btn btn-success">Submit Data</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label>2. RRB ALP 2024 CBAT Roll Number (15 digits):</label>
-                    <input type="text" id="rollNumber" required maxlength="15" pattern="[0-9]{15}" 
-                           placeholder="Enter exact 15-digit roll number">
-                </div>
-
-                <div class="form-group">
-                    <label>3. ALP 2024 CBT 2 Part A Marks (0-100):</label>
-                    <input type="number" id="cbt2Marks" required min="0" max="100" 
-                           placeholder="Enter exact marks as in score card">
-                </div>
-
-                <div class="form-group">
-                    <label>4. Applied RRB Zone:</label>
-                    <select id="zone" required>
-                        <option value="">Select Zone</option>
-                        <option value="Ahmedabad">Ahmedabad</option>
-                        <option value="Ajmer">Ajmer</option>
-                        <option value="Bangalore">Bangalore</option>
-                        <option value="Bhopal">Bhopal</option>
-                        <option value="Bhubaneswar">Bhubaneswar</option>
-                        <option value="Bilaspur">Bilaspur</option>
-                        <option value="Chandigarh">Chandigarh</option>
-                        <option value="Chennai">Chennai</option>
-                        <option value="Gorakhpur">Gorakhpur</option>
-                        <option value="Guwahati">Guwahati</option>
-                        <option value="Jammu and Srinagar">Jammu and Srinagar</option>
-                        <option value="Kolkata">Kolkata</option>
-                        <option value="Malda">Malda</option>
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Muzaffarpur">Muzaffarpur</option>
-                        <option value="Patna">Patna</option>
-                        <option value="Prayagraj">Prayagraj</option>
-                        <option value="Ranchi">Ranchi</option>
-                        <option value="Secunderabad">Secunderabad</option>
-                        <option value="Siliguri">Siliguri</option>
-                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>5. RRB ALP 2024 CBAT Exam Date:</label>
-                    <input type="date" id="examDate" required value="2024-07-15">
-                </div>
-
-                <div class="form-group">
-                    <label>6. Shift:</label>
-                    <select id="shift" required>
-                        <option value="">Select Shift</option>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>7. Memory (Figure-Find Memory) Battery Test 1 Attempts (0-24):</label>
-                    <input type="number" id="battery1Attempts" required min="0" max="24">
-                </div>
-
-                <div class="form-group">
-                    <label>8. Memory Battery Test 1 Accuracy (0-100%):</label>
-                    <input type="number" id="battery1Accuracy" required min="0" max="100">
-                </div>
-
-                <div class="form-group">
-                    <label>9. Directions (Watch) Battery Test 2 Attempts (0-20):</label>
-                    <input type="number" id="battery2Attempts" required min="0" max="20">
-                </div>
-
-                <div class="form-group">
-                    <label>10. Directions Battery Test 2 Accuracy (0-100%):</label>
-                    <input type="number" id="battery2Accuracy" required min="0" max="100">
-                </div>
-
-                <div class="form-group">
-                    <label>11. Depth Perception (Hidden Cube) Battery Test 3 Attempts (0-50):</label>
-                    <input type="number" id="battery3Attempts" required min="0" max="50">
-                </div>
-
-                <div class="form-group">
-                    <label>12. Depth Perception Battery Test 3 Accuracy (0-100%):</label>
-                    <input type="number" id="battery3Accuracy" required min="0" max="100">
-                </div>
-
-                <div class="form-group">
-                    <label>13. Concentration (Figure Placement) Battery Test 4 Attempts (0-60):</label>
-                    <input type="number" id="battery4Attempts" required min="0" max="60">
-                </div>
-
-                <div class="form-group">
-                    <label>14. Concentration Battery Test 4 Accuracy (0-100%):</label>
-                    <input type="number" id="battery4Accuracy" required min="0" max="100">
-                </div>
-
-                <div class="form-group">
-                    <label>15. Perceptual Speed (Same Figure Matching) Battery Test 5 Attempts (0-72):</label>
-                    <input type="number" id="battery5Attempts" required min="0" max="72">
-                </div>
-
-                <div class="form-group">
-                    <label>16. Perceptual Speed Battery Test 5 Accuracy (0-100%):</label>
-                    <input type="number" id="battery5Accuracy" required min="0" max="100">
-                </div>
-
-                <button type="submit" class="btn">Submit Form</button>
-                <button type="button" class="btn btn-secondary" onclick="showInitialModal()">Back</button>
-            </form>
-        </div>
-
-        <!-- Report Display -->
-        <div id="reportSection" class="card hidden">
-            <div id="reportContent"></div>
-        </div>
-
-        <!-- Loading Indicator -->
-        <div id="loading" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Processing your request...</p>
-        </div>
-
-        <!-- Admin Section (hidden by default) -->
-        <div id="adminSection" class="admin-section hidden">
-            <h2>Admin Panel</h2>
-            <div class="form-group">
-                <label for="adminPassword">Enter Admin Password:</label>
-                <input type="password" id="adminPassword" placeholder="Enter password">
             </div>
-            <button class="btn" onclick="verifyAdmin()">Login</button>
             
-            <div id="adminControls" class="hidden">
-                <h3>Admin Controls</h3>
-                <button class="btn" onclick="generateCSV()">Generate CSV Report</button>
+            <div id="report-section" class="hidden">
+                <div class="report-card">
+                    <div class="report-header">
+                        <h2>Get Your Report</h2>
+                        <p>Enter your roll number to view your calculated scores</p>
+                    </div>
+                    
+                    <div style="max-width: 500px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label for="report-rollno">15 Digit Roll Number *</label>
+                            <input type="text" id="report-rollno" pattern="[0-9]{15}" title="15 digit roll number" required>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 25px;">
+                            <button class="btn btn-primary" onclick="getReport()">Get Report</button>
+                        </div>
+                    </div>
+                    
+                    <div id="report-results" class="hidden">
+                        <div class="report-header">
+                            <h2>Your CBAT Score Report</h2>
+                            <p>Based on your performance and comparison with your group</p>
+                        </div>
+                        
+                        <div class="report-details">
+                            <div class="detail-item">
+                                <h4>Zone</h4>
+                                <p id="report-zone">-</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>Exam Date</h4>
+                                <p id="report-date">-</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>Shift</h4>
+                                <p id="report-shift">-</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>Re-Exam Candidate</h4>
+                                <p id="report-reexam">-</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>Group Size</h4>
+                                <p id="report-group-size">-</p>
+                            </div>
+                        </div>
+                        
+                        <div class="battery-results">
+                            <div class="battery-result">
+                                <h4>Memory Test</h4>
+                                <div class="score-value" id="report-tscore1">-</div>
+                                <p>T-Score</p>
+                            </div>
+                            <div class="battery-result">
+                                <h4>Directions Test</h4>
+                                <div class="score-value" id="report-tscore2">-</div>
+                                <p>T-Score</p>
+                            </div>
+                            <div class="battery-result">
+                                <h4>Depth Perception</h4>
+                                <div class="score-value" id="report-tscore3">-</div>
+                                <p>T-Score</p>
+                            </div>
+                            <div class="battery-result">
+                                <h4>Concentration</h4>
+                                <div class="score-value" id="report-tscore4">-</div>
+                                <p>T-Score</p>
+                            </div>
+                            <div class="battery-result">
+                                <h4>Perceptual Speed</h4>
+                                <div class="score-value" id="report-tscore5">-</div>
+                                <p>T-Score</p>
+                            </div>
+                        </div>
+                        
+                        <div class="overall-score">
+                            <h3>Overall Score</h3>
+                            <div class="score-value" id="report-overall">-</div>
+                            <p>Out of 30</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="admin-section" class="hidden">
+                <div class="admin-section">
+                    <h2 style="text-align: center; color: #1a2a6c; margin-bottom: 20px;">Admin Panel</h2>
+                    
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label for="admin-password">Password</label>
+                            <input type="password" id="admin-password" required>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 25px;">
+                            <button class="btn btn-primary" onclick="generateCSV()">Generate CSV Report</button>
+                        </div>
+                    </div>
+                    
+                    <div id="admin-results" class="hidden">
+                        <div style="text-align: center; margin: 20px 0;">
+                            <a href="#" class="btn btn-success" id="download-link">Download CSV File</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="notification"></div>
+        </div>
+        
+        <footer>
+            <p>© 2024 RRB ALP 2024 CBAT Score Calculator | Disclaimer: This is not an official website of Indian Railways</p>
+        </footer>
+    </div>
+    
+    <div id="initial-popup" class="popup">
+        <div class="popup-content">
+            <h2>Welcome to RRB ALP 2024 CBAT Score Calculator</h2>
+            <p>Have you filled out the form earlier?</p>
+            <div style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="hidePopup(true)">Yes</button>
+                <button class="btn btn-secondary" onclick="hidePopup(false)">No</button>
             </div>
         </div>
     </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
+    
+    <div id="rollno-popup" class="popup hidden">
+        <div class="popup-content">
+            <h2>Enter Your Roll Number</h2>
+            <div class="form-group">
+                <label for="popup-rollno">15 Digit Roll Number</label>
+                <input type="text" id="popup-rollno" pattern="[0-9]{15}" title="15 digit roll number" required>
+            </div>
+            <div style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="checkRollNo()">Submit</button>
+                <button class="btn btn-secondary" onclick="showForm()">Fill Form Instead</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="update-warning" class="popup hidden">
+        <div class="popup-content">
             <h2>Data Already Exists</h2>
-            <p>Are you sure you want to change the data that was filled earlier?</p>
-            <button class="btn" onclick="confirmUpdate(true)">Yes, Update</button>
-            <button class="btn btn-secondary" onclick="confirmUpdate(false)">No, Show Existing Report</button>
+            <p>This roll number already exists in our database. Do you want to update your data?</p>
+            <div style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="confirmUpdate(true)">Yes, Update</button>
+                <button class="btn btn-secondary" onclick="confirmUpdate(false)">No, View Report</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Configuration
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbworRhBQkGxA5aDvVszUwdt2PZcLvzoZCmzg2TST1ZcsW4dZfWtOLcbqVQN-ZMw5ol5/exec'; // Replace with your deployed Google Apps Script URL
-        const TELEGRAM_CHANNEL = 'https://t.me/Akki_Inspire'; // Replace with your telegram channel
-        const ADMIN_PASSWORD = 'mjhgjfgdxtfcghjk.jnb$@#%^*((*&^%%#$%(^)))BHGBdtrhvbyuftyu$%%&^R6vhnvhjgb'; // Replace with your admin password
-
-        // Global variables
-        let currentFormData = {};
-        let pendingUpdate = false;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if we're on admin route
-            if (window.location.pathname.includes('/admin') || window.location.hash === '#admin') {
-                showAdmin();
+        // Replace with your deployed Google Apps Script URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxHfzKHnHU7-aU2ZZ2RcjK5TAYic2bVrMvJCyDyCqzof6yCgrYuGHo3gvOX0NopbfbhIg/exec';
+        
+        // Check if this is an admin access
+        const isAdminPage = window.location.hash === '#admin';
+        if (isAdminPage) {
+            // Show admin section and hide the admin nav link
+            document.getElementById('admin-nav').classList.remove('hidden');
+            showAdmin();
+        }
+        
+        // Show/hide sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.main-content > div').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+        
+        function showHome() {
+            showSection('home-section');
+            window.location.hash = '';
+        }
+        
+        function showForm() {
+            showSection('form-section');
+            window.location.hash = '';
+            hideAllPopups();
+        }
+        
+        function showReportForm() {
+            showSection('report-section');
+            window.location.hash = '';
+            hideAllPopups();
+        }
+        
+        function showAdmin() {
+            showSection('admin-section');
+            window.location.hash = 'admin';
+            hideAllPopups();
+        }
+        
+        // Popup handling
+        function hidePopup(filledEarlier) {
+            document.getElementById('initial-popup').classList.add('hidden');
+            if (filledEarlier) {
+                document.getElementById('rollno-popup').classList.remove('hidden');
+            } else {
+                showForm();
+            }
+        }
+        
+        function hideAllPopups() {
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.classList.add('hidden');
+            });
+        }
+        
+        // Check roll number from popup
+        function checkRollNo() {
+            const rollNo = document.getElementById('popup-rollno').value;
+            if (!rollNo || rollNo.length !== 15) {
+                showNotification('Please enter a valid 15-digit roll number', 'error');
+                return;
             }
             
-            // Form submission
-            document.getElementById('cbatForm').addEventListener('submit', handleFormSubmit);
-        });
-
-        // Navigation functions
-        function showHome() {
-            hideAllSections();
-            document.getElementById('initialModal').style.display = 'flex';
+            fetch(`${scriptURL}?path=checkRollNo&rollNo=${rollNo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        getReport(rollNo);
+                    } else {
+                        showNotification('Roll number not found. Please fill out the form.', 'error');
+                        showForm();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error checking roll number. Please try again.', 'error');
+                });
         }
-
-        function showReports() {
-            showRollNoInput();
-        }
-
-        function showInitialModal() {
-            hideAllSections();
-            document.getElementById('initialModal').style.display = 'flex';
-        }
-
-        function showRollNoInput() {
-            hideAllSections();
-            document.getElementById('rollNoModal').style.display = 'flex';
-            document.getElementById('rollNoInput').focus();
-        }
-
-        function showForm() {
-            hideAllSections();
-            document.getElementById('mainForm').classList.remove('hidden');
-        }
-
-        function showAdmin() {
-            hideAllSections();
-            document.getElementById('adminSection').classList.remove('hidden');
-        }
-
-        function hideAllSections() {
-            document.getElementById('initialModal').style.display = 'none';
-            document.getElementById('rollNoModal').style.display = 'none';
-            document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('mainForm').classList.add('hidden');
-            document.getElementById('reportSection').classList.add('hidden');
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('adminSection').classList.add('hidden');
-        }
-
-        function openTelegramChannel() {
-            window.open(TELEGRAM_CHANNEL, '_blank');
-        }
-
-        // Form handling
-        function handleFormSubmit(e) {
+        
+        // Form submission
+        document.getElementById('cbat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = collectFormData();
-            if (!validateFormData(formData)) {
+            // Validate form
+            const rollNo = document.getElementById('rollNo').value;
+            if (!rollNo || rollNo.length !== 15) {
+                showNotification('Please enter a valid 15-digit roll number', 'error');
                 return;
             }
-
-            currentFormData = formData;
-            showLoading();
             
-            // Check if roll number already exists
-            checkRollNumberExists(formData.rollNumber)
-                .then(exists => {
-                    hideLoading();
-                    if (exists) {
-                        showConfirmModal();
-                    } else {
-                        submitFormData(formData);
-                    }
-                })
-                .catch(error => {
-                    hideLoading();
-                    showError('Error checking roll number: ' + error.message);
-                });
-        }
-
-        function collectFormData() {
-            return {
-                reExam: document.getElementById('reExam').value,
-                rollNumber: document.getElementById('rollNumber').value,
-                cbt2Marks: parseInt(document.getElementById('cbt2Marks').value),
-                zone: document.getElementById('zone').value,
-                examDate: document.getElementById('examDate').value,
-                shift: document.getElementById('shift').value,
-                battery1Attempts: parseInt(document.getElementById('battery1Attempts').value),
-                battery1Accuracy: parseInt(document.getElementById('battery1Accuracy').value),
-                battery2Attempts: parseInt(document.getElementById('battery2Attempts').value),
-                battery2Accuracy: parseInt(document.getElementById('battery2Accuracy').value),
-                battery3Attempts: parseInt(document.getElementById('battery3Attempts').value),
-                battery3Accuracy: parseInt(document.getElementById('battery3Accuracy').value),
-                battery4Attempts: parseInt(document.getElementById('battery4Attempts').value),
-                battery4Accuracy: parseInt(document.getElementById('battery4Accuracy').value),
-                battery5Attempts: parseInt(document.getElementById('battery5Attempts').value),
-                battery5Accuracy: parseInt(document.getElementById('battery5Accuracy').value)
-            };
-        }
-
-        function validateFormData(data) {
-            if (data.rollNumber.length !== 15 || !/^\d{15}$/.test(data.rollNumber)) {
-                showError('Roll number must be exactly 15 digits');
-                return false;
-            }
-            return true;
-        }
-
-        function checkRollNumber() {
-            const rollNo = document.getElementById('rollNoInput').value.trim();
-            if (!rollNo || rollNo.length !== 15 || !/^\d{15}$/.test(rollNo)) {
-                showError('Please enter a valid 15-digit roll number');
-                return;
-            }
-
-            showLoading();
-            fetchStudentData(rollNo)
+            // Check if roll number exists first
+            fetch(`${scriptURL}?path=checkRollNo&rollNo=${rollNo}`)
+                .then(response => response.json())
                 .then(data => {
-                    hideLoading();
-                    if (data) {
-                        generateAndShowReport(data);
+                    if (data.exists) {
+                        // Show update warning
+                        document.getElementById('update-warning').classList.remove('hidden');
                     } else {
-                        showError('Roll number not found. Please try again or fill the form.');
+                        // Submit form directly
+                        submitForm();
                     }
                 })
                 .catch(error => {
-                    hideLoading();
-                    showError('Error fetching data: ' + error.message);
+                    console.error('Error:', error);
+                    showNotification('Error checking roll number. Please try again.', 'error');
                 });
-        }
-
-        // API functions
-        async function checkRollNumberExists(rollNumber) {
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'checkRollNumber', rollNumber })
-                });
-                const result = await response.json();
-                return result.exists;
-            } catch (error) {
-                throw new Error('Failed to check roll number');
-            }
-        }
-
-        async function fetchStudentData(rollNumber) {
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'getStudentData', rollNumber })
-                });
-                const result = await response.json();
-                return result.data;
-            } catch (error) {
-                throw new Error('Failed to fetch student data');
-            }
-        }
-
-        async function submitFormData(formData, update = false) {
-            try {
-                showLoading();
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        action: update ? 'updateStudent' : 'addStudent', 
-                        data: formData 
-                    })
-                });
-                const result = await response.json();
-                hideLoading();
-                
-                if (result.success) {
-                    generateAndShowReport(result.studentData);
-                } else {
-                    showError('Error submitting form: ' + result.error);
-                }
-            } catch (error) {
-                hideLoading();
-                showError('Error submitting form: ' + error.message);
-            }
-        }
-
-        // Report generation
-        function generateAndShowReport(studentData) {
-            showLoading();
-            
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    action: 'generateReport', 
-                    studentData: studentData 
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                hideLoading();
-                if (result.success) {
-                    displayReport(result.report, studentData);
-                } else {
-                    showError('Error generating report: ' + result.error);
-                }
-            })
-            .catch(error => {
-                hideLoading();
-                showError('Error generating report: ' + error.message);
-            });
-        }
-
-        function displayReport(reportData, studentData) {
-            hideAllSections();
-            
-            const reportContent = document.getElementById('reportContent');
-            const isReExam = studentData.reExam === 'Yes';
-            
-            reportContent.innerHTML = `
-                <h2>CBAT Performance Report</h2>
-                <div class="success">
-                    <strong>Student Details:</strong><br>
-                    Roll Number: ${studentData.rollNumber}<br>
-                    Zone: ${studentData.zone}<br>
-                    Exam Date: ${studentData.examDate}<br>
-                    Shift: ${studentData.shift}<br>
-                    Re-exam Status: ${studentData.reExam}<br>
-                    CBT2 Part A Marks: ${studentData.cbt2Marks}
-                </div>
-                
-                <h3>Battery Test Results</h3>
-                <table class="report-table">
-                    <thead>
-                        <tr>
-                            <th>Battery Test</th>
-                            <th>Your Raw Score</th>
-                            <th>Group Average</th>
-                            <th>Standard Deviation</th>
-                            <th>T-Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Memory (Figure-Find)</td>
-                            <td>${reportData.battery1.rawScore}</td>
-                            <td>${reportData.battery1.average.toFixed(2)}</td>
-                            <td>${reportData.battery1.stdDev.toFixed(2)}</td>
-                            <td>${reportData.battery1.tScore.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>Directions (Watch)</td>
-                            <td>${reportData.battery2.rawScore}</td>
-                            <td>${reportData.battery2.average.toFixed(2)}</td>
-                            <td>${reportData.battery2.stdDev.toFixed(2)}</td>
-                            <td>${reportData.battery2.tScore.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>Depth Perception (Hidden Cube)</td>
-                            <td>${reportData.battery3.rawScore}</td>
-                            <td>${reportData.battery3.average.toFixed(2)}</td>
-                            <td>${reportData.battery3.stdDev.toFixed(2)}</td>
-                            <td>${reportData.battery3.tScore.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>Concentration (Figure Placement)</td>
-                            <td>${reportData.battery4.rawScore}</td>
-                            <td>${reportData.battery4.average.toFixed(2)}</td>
-                            <td>${reportData.battery4.stdDev.toFixed(2)}</td>
-                            <td>${reportData.battery4.tScore.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>Perceptual Speed (Same Figure Matching)</td>
-                            <td>${reportData.battery5.rawScore}</td>
-                            <td>${reportData.battery5.average.toFixed(2)}</td>
-                            <td>${reportData.battery5.stdDev.toFixed(2)}</td>
-                            <td>${reportData.battery5.tScore.toFixed(2)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="success" style="margin-top: 2rem;">
-                    <h3>Overall Score: ${reportData.overallScore.toFixed(2)}/30</h3>
-                    <p><strong>Group:</strong> ${isReExam ? 'Re-exam Candidates' : 'Regular Candidates'}</p>
-                    <p><strong>Comparison Group:</strong> ${studentData.zone} - ${studentData.examDate} - ${studentData.shift}</p>
-                </div>
-                
-                <button class="btn" onclick="showInitialModal()">Generate Another Report</button>
-                <button class="btn btn-secondary" onclick="window.print()">Print Report</button>
-            `;
-            
-            document.getElementById('reportSection').classList.remove('hidden');
-        }
-
-        // Modal functions
-        function showConfirmModal() {
-            document.getElementById('confirmModal').style.display = 'flex';
-        }
-
+        });
+        
         function confirmUpdate(shouldUpdate) {
-            document.getElementById('confirmModal').style.display = 'none';
-            
             if (shouldUpdate) {
-                submitFormData(currentFormData, true);
+                submitForm();
             } else {
-                // Show existing report
-                fetchStudentData(currentFormData.rollNumber)
-                    .then(data => {
-                        if (data) {
-                            generateAndShowReport(data);
-                        }
-                    });
+                getReport(document.getElementById('rollNo').value);
             }
+            document.getElementById('update-warning').classList.add('hidden');
         }
-
-        // Admin functions
-        function verifyAdmin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('adminControls').classList.remove('hidden');
-                showSuccess('Admin access granted');
-            } else {
-                showError('Invalid admin password');
-            }
-        }
-
-        function generateCSV() {
-            showLoading();
+        
+        function submitForm() {
+            const formData = new FormData(document.getElementById('cbat-form'));
+            const params = new URLSearchParams();
             
-            fetch(GOOGLE_SCRIPT_URL, {
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+            
+            fetch(`${scriptURL}?path=submit`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'generateCSV' })
+                body: params
             })
             .then(response => response.json())
-            .then(result => {
-                hideLoading();
-                if (result.success) {
-                    downloadCSV(result.csvData, 'cbat_report.csv');
-                    showSuccess('CSV report generated successfully');
+            .then(data => {
+                if (data.success) {
+                    showNotification('Data submitted successfully!', 'success');
+                    displayReport(data.data);
                 } else {
-                    showError('Error generating CSV: ' + result.error);
+                    showNotification('Error submitting data. Please try again.', 'error');
                 }
             })
             .catch(error => {
-                hideLoading();
-                showError('Error generating CSV: ' + error.message);
+                console.error('Error:', error);
+                showNotification('Error submitting data. Please try again.', 'error');
             });
         }
-
-        function downloadCSV(csvData, filename) {
-            const blob = new Blob([csvData], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }
-
-        // Utility functions
-        function showLoading() {
-            hideAllSections();
-            document.getElementById('loading').classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.add('hidden');
-        }
-
-        function showError(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error';
-            errorDiv.textContent = message;
-            errorDiv.style.position = 'fixed';
-            errorDiv.style.top = '100px';
-            errorDiv.style.left = '50%';
-            errorDiv.style.transform = 'translateX(-50%)';
-            errorDiv.style.zIndex = '3000';
-            errorDiv.style.maxWidth = '80%';
+        
+        // Get report
+        function getReport(rollNo = null) {
+            const reportRollNo = rollNo || document.getElementById('report-rollno').value;
             
-            document.body.appendChild(errorDiv);
+            if (!reportRollNo || reportRollNo.length !== 15) {
+                showNotification('Please enter a valid 15-digit roll number', 'error');
+                return;
+            }
+            
+            fetch(`${scriptURL}?path=getReport&rollNo=${reportRollNo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayReport(data.data);
+                        showSection('report-section');
+                    } else {
+                        showNotification(data.error || 'Error retrieving report. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error retrieving report. Please try again.', 'error');
+                });
+        }
+        
+        // Display report
+        function displayReport(data) {
+            document.getElementById('report-zone').textContent = data.Zone;
+            document.getElementById('report-date').textContent = data.ExamDate;
+            document.getElementById('report-shift').textContent = data.Shift;
+            document.getElementById('report-reexam').textContent = data.ReExam;
+            document.getElementById('report-group-size').textContent = data.GroupSize;
+            
+            document.getElementById('report-tscore1').textContent = data.Battery1.TScore.toFixed(2);
+            document.getElementById('report-tscore2').textContent = data.Battery2.TScore.toFixed(2);
+            document.getElementById('report-tscore3').textContent = data.Battery3.TScore.toFixed(2);
+            document.getElementById('report-tscore4').textContent = data.Battery4.TScore.toFixed(2);
+            document.getElementById('report-tscore5').textContent = data.Battery5.TScore.toFixed(2);
+            
+            document.getElementById('report-overall').textContent = data.OverallScore.toFixed(2);
+            
+            document.getElementById('report-results').classList.remove('hidden');
+        }
+        
+        // Admin functions
+        function generateCSV() {
+            const password = document.getElementById('admin-password').value;
+            if (!password) {
+                showNotification('Please enter the admin password', 'error');
+                return;
+            }
+            
+            fetch(`${scriptURL}?path=admin&password=${password}`)
+                .then(response => response.text())
+                .then(csvData => {
+                    // Create a download link
+                    const blob = new Blob([csvData], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.getElementById('download-link');
+                    a.href = url;
+                    a.download = 'cbat_data.csv';
+                    
+                    // Show download link
+                    document.getElementById('admin-results').classList.remove('hidden');
+                    showNotification('CSV file generated successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error generating CSV. Please try again.', 'error');
+                });
+        }
+        
+        // Notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `<div class="notification ${type}">${message}</div>`;
             
             setTimeout(() => {
-                if (errorDiv.parentNode) {
-                    errorDiv.parentNode.removeChild(errorDiv);
-                }
+                notification.innerHTML = '';
             }, 5000);
         }
-
-        function showSuccess(message) {
-            const successDiv = document.createElement('div');
-            successDiv.className = 'success';
-            successDiv.textContent = message;
-            successDiv.style.position = 'fixed';
-            successDiv.style.top = '100px';
-            successDiv.style.left = '50%';
-            successDiv.style.transform = 'translateX(-50%)';
-            successDiv.style.zIndex = '3000';
-            successDiv.style.maxWidth = '80%';
-            
-            document.body.appendChild(successDiv);
-            
-            setTimeout(() => {
-                if (successDiv.parentNode) {
-                    successDiv.parentNode.removeChild(successDiv);
-                }
-            }, 3000);
-        }
-
-        // Handle browser routing for admin
-        window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#admin') {
-                showAdmin();
-            }
-        });
-
-        // Handle direct admin URL access
-        if (window.location.pathname.includes('admin') || window.location.hash === '#admin') {
-            document.addEventListener('DOMContentLoaded', function() {
-                showAdmin();
-            });
+        
+        // Initialize page
+        if (!isAdminPage) {
+            showHome();
         }
     </script>
 </body>
-</html> '
+</html>
