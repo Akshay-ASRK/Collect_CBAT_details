@@ -175,7 +175,7 @@
 
 <script>
 /* ===== CONFIG ===== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLwh160aM1zXFzJdF9TPXNOZrfowWRYdD6Co8j5VdesH0GNZ7NxfxcpiXpJU4ZRabOVQ/exec"; // <-- set me
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg1sD163E6pBlZshzQ1vp3xLEvW2jc1vdD7ccbiZm9WLjlCRkR-Si1pK37wnSA2zdO3g/exec"; // <-- set me
 
 /* ===== UTIL ===== */
 const qs = sel => document.querySelector(sel);
@@ -186,7 +186,7 @@ function toast(msg, type='info'){
 function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
 
 /* ===== INIT ===== */
-const pathIsAdmin = location.pathname.endsWith('/admin') || location.pathname.endsWith('/admin/');
+const pathIsAdmin = location.pathname.endsWith('/admin') || location.pathname.endsWith('#admin');
 document.addEventListener('DOMContentLoaded', () => {
   if (pathIsAdmin) {
     qs('#adminWrap').style.display = 'block';
